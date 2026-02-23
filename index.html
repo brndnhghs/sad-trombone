@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sad Trombone</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+        }
+
+        /* Steampunk background gears */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(184, 134, 11, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            top: -100px;
+            right: -100px;
+            animation: rotate 20s linear infinite;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(184, 134, 11, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            bottom: -80px;
+            left: -80px;
+            animation: rotate-reverse 15s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes rotate-reverse {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+
+        .container {
+            text-align: center;
+            z-index: 1;
+        }
+
+        .trombone-container {
+            margin-bottom: 40px;
+            font-size: 120px;
+            animation: bounce 0.6s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(184, 134, 11, 0.5));
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        h1 {
+            color: #d4af37;
+            text-shadow: 0 0 20px rgba(184, 134, 11, 0.8), 0 0 40px rgba(184, 134, 11, 0.4);
+            font-size: 48px;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .button {
+            background: linear-gradient(145deg, #b8860b 0%, #8b6508 50%, #5a4404 100%);
+            color: #fff;
+            border: 3px solid #d4af37;
+            padding: 20px 50px;
+            font-size: 24px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 2px;
+            box-shadow: 
+                0 0 20px rgba(184, 134, 11, 0.8),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                inset 0 -2px 5px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .button:hover::before {
+            left: 100%;
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 10px 30px rgba(184, 134, 11, 1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                inset 0 -2px 5px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(145deg, #d4af37 0%, #b8860b 50%, #8b6508 100%);
+            color: #1a1a1a;
+        }
+
+        .button:active {
+            transform: translateY(-1px);
+            box-shadow: 
+                0 5px 15px rgba(184, 134, 11, 0.8),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                inset 0 -2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .subtitle {
+            color: #b8860b;
+            font-size: 16px;
+            margin-top: 30px;
+            opacity: 0.8;
+            letter-spacing: 1px;
+        }
+
+        /* Gears decoration */
+        .gear {
+            position: absolute;
+            opacity: 0.15;
+            font-size: 80px;
+        }
+
+        .gear-1 {
+            top: 20%;
+            left: 10%;
+            animation: rotate 25s linear infinite;
+        }
+
+        .gear-2 {
+            bottom: 20%;
+            right: 10%;
+            animation: rotate-reverse 30s linear infinite;
+        }
+
+        .gear-3 {
+            top: 50%;
+            right: 5%;
+            animation: rotate 20s linear infinite;
+            font-size: 60px;
+        }
+    </style>
+</head>
+<body>
+    <div class="gear gear-1">⚙️</div>
+    <div class="gear gear-2">⚙️</div>
+    <div class="gear gear-3">⚙️</div>
+
+    <div class="container">
+        <div class="trombone-container">
+            🎺
+        </div>
+        <h1>Sad Trombone</h1>
+        <button class="button" onclick="playSadTrombone()">ENGAGE SORROWBOT</button>
+        <p class="subtitle">~ Press to activate melancholy protocol ~</p>
+    </div>
+
+    <audio id="sadTromboneSound" preload="auto"></audio>
+
+    <script>
+        // Web Audio API to generate sad trombone sound
+        function playSadTrombone() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const now = audioContext.currentTime;
+
+            // Create oscillator
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+
+            // Sad trombone frequencies (descending)
+            const frequencies = [392, 349.23, 330, 293.66, 261.63]; // G4, F4, E4, D4, C4
+            const duration = 0.15;
+
+            // Play descending notes with slide effect
+            let currentTime = now;
+            frequencies.forEach((freq, index) => {
+                osc.frequency.setTargetAtTime(freq, currentTime, 0.05);
+                currentTime += duration;
+            });
+
+            // Envelope
+            gain.gain.setValueAtTime(0.3, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + duration * frequencies.length);
+
+            osc.start(now);
+            osc.stop(now + duration * frequencies.length);
+        }
+    </script>
+</body>
+</html>
